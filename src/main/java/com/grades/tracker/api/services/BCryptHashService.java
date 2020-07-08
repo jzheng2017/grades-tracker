@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BCryptHashService implements HashService {
-
-
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired

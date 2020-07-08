@@ -11,7 +11,6 @@ import java.util.Base64;
 
 @Service
 public class KeyService {
-
     private AppConfig keyConfig;
 
     @Autowired
