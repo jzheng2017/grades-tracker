@@ -3,6 +3,7 @@ package com.grades.tracker.api.services;
 import com.grades.tracker.api.dto.UserSchoolDTO;
 import com.grades.tracker.api.entities.QUserSchool;
 import com.grades.tracker.api.entities.UserSchool;
+import com.grades.tracker.api.exceptions.ResourceNotFoundException;
 import com.grades.tracker.api.mappers.UserSchoolMapper;
 import com.grades.tracker.api.repositories.UserSchoolRepository;
 import com.querydsl.core.types.Predicate;
@@ -27,8 +28,8 @@ public class UserSchoolService {
         this.userSchoolMapper = userSchoolMapper;
     }
 
-    public List<UserSchoolDTO> getAllSchoolsOfUser(Predicate predicate, Pageable pageable, int userId) {
-        predicate = QUserSchool.userSchool.user.id.eq(userId).and(predicate);
+    public List<UserSchoolDTO> getAllUserSchools(Predicate predicate, Pageable pageable) {
+        predicate = returnPredicateWhenNull(predicate);
 
         List<UserSchool> listOfUserSchoolEntities = userSchoolRepository.findAll(predicate, pageable).getContent();
 
@@ -41,5 +42,35 @@ public class UserSchoolService {
             return QUserSchool.userSchool.user.id.ne(-1); // bug workaround of QueryDSL Web Support, it returns null when no matching criteria is passed in
         }
         return predicate;
+    }
+
+    public UserSchoolDTO addUserSchool(UserSchoolDTO userSchoolDTO) {
+        return createUpdateUserSchoolDTO(userSchoolDTO);
+    }
+
+
+    public UserSchoolDTO updateUserSchool(UserSchoolDTO userSchoolDTO) {
+        if (userSchoolRepository.existsById(userSchoolDTO.getId())) {
+            return createUpdateUserSchoolDTO(userSchoolDTO);
+        } else {
+            throw new ResourceNotFoundException("User school not found");
+        }
+    }
+
+    private UserSchoolDTO createUpdateUserSchoolDTO(UserSchoolDTO userSchoolDTO) {
+        UserSchool mappedUserSchoolEntity = userSchoolMapper.mapToUserSchool(userSchoolDTO);
+        UserSchool savedUserSchoolEntity = userSchoolRepository.save(mappedUserSchoolEntity);
+
+        return userSchoolMapper.mapToUserSchoolDTO(savedUserSchoolEntity);
+    }
+
+    public Boolean deleteUserSchoolById(Integer userSchoolId) {
+
+        if (userSchoolRepository.existsById(userSchoolId)) {
+            userSchoolRepository.deleteById(userSchoolId);
+            return true;
+        } else {
+            throw new ResourceNotFoundException(String.format("User school id %d does not exist", userSchoolId));
+        }
     }
 }
