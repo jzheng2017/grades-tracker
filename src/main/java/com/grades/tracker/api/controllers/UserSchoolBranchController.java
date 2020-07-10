@@ -37,4 +37,9 @@ public class UserSchoolBranchController {
     public ResponseEntity<UserSchoolBranchDTO> updateUserSchoolBranch(@Valid @RequestBody UserSchoolBranchDTO userSchoolBranchDTO) {
         return ResponseEntity.ok(userSchoolBranchService.updateUserSchoolBranch(userSchoolBranchDTO));
     }
+
+    @DeleteMapping("{userSchoolBranchId}")
+    public ResponseEntity<Boolean> deleteUserSchoolBranch(@PathVariable("userSchoolBranchId") Integer userSchoolBranchId) {
+        return ResponseEntity.ok(userSchoolBranchService.deleteUserSchoolBranch(userSchoolBranchId));
+    }
 }
