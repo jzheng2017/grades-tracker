@@ -61,4 +61,13 @@ public class UserSchoolBranchService {
         }
         return predicate;
     }
+
+    public Boolean deleteUserSchoolBranch(Integer userSchoolBranchId) {
+        if (userSchoolBranchRepository.existsById(userSchoolBranchId)) {
+            userSchoolBranchRepository.deleteById(userSchoolBranchId);
+            return true;
+        } else {
+            throw new ResourceNotFoundException(String.format("User school branch with the id %d does not exist.", userSchoolBranchId));
+        }
+    }
 }
