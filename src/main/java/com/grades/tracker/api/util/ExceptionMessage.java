@@ -1,10 +1,13 @@
 package com.grades.tracker.api.util;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class ExceptionMessage {
     private int errorCode;
     private String errorMessage;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp;
 
     public ExceptionMessage(int errorCode, String errorMessage, LocalDateTime errorTime) {
