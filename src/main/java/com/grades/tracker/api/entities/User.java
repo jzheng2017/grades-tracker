@@ -1,43 +1,39 @@
 package com.grades.tracker.api.entities;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "first_name")
-    @NotNull
+
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(name = "last_name")
-    @NotNull
+    @Column(nullable = false, name = "last_name")
     private String lastName;
 
-    @Column(name = "username")
-    @NotNull
+    @Column(nullable = false, name = "username")
     private String username;
 
-    @Column(name = "password")
-    @NotNull
+    @Column(nullable = false, name = "password")
     private String password;
 
-    @Column(name = "email")
-    @NotNull
+    @Column(nullable = false, name = "email")
     private String email;
 
-    @Column(name = "created_at")
-    @NotNull
+    @Column(nullable = false, name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     public Integer getId() {

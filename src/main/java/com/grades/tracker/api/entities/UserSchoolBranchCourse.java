@@ -1,13 +1,13 @@
 package com.grades.tracker.api.entities;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(uniqueConstraints={
+@Table(name = "user_school_branch_course", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"course_name", "user_school_branch_id"})
 })
 public class UserSchoolBranchCourse {
@@ -18,16 +18,15 @@ public class UserSchoolBranchCourse {
     @ManyToOne
     private UserSchoolBranch userSchoolBranch;
 
-    @Column(name = "course_name")
-    @NotNull
+    @Column(nullable = false, name = "course_name")
     private String courseName;
 
-    @Column(name = "created_at")
-    @NotNull
+    @Column(nullable = false, name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     public Integer getId() {

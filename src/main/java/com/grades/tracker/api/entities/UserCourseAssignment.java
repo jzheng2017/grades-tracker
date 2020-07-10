@@ -1,14 +1,14 @@
 package com.grades.tracker.api.entities;
 
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(uniqueConstraints={
+@Table(name = "user_course_assignment", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_school_branch_course_id", "assignment_name", "attempt_no"})
 })
 public class UserCourseAssignment {
@@ -19,21 +19,21 @@ public class UserCourseAssignment {
     @ManyToOne
     private UserSchoolBranchCourse userSchoolBranchCourse;
 
-    @Column(name = "assignment_name")
+    @Column(nullable = false, name = "assignment_name")
     private String assignmentName;
 
-    @Column(name = "attempt_no")
+    @Column(nullable = false, name = "attempt_no")
     private int attemptNo;
 
     @Column(name = "grade")
     private float grade;
 
-    @Column(name = "created_at")
-    @NotNull
+    @Column(nullable = false, name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     public Integer getId() {
