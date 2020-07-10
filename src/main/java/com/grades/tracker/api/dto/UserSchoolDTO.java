@@ -1,12 +1,16 @@
 package com.grades.tracker.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class UserSchoolDTO {
     private Integer id;
     private String schoolName;
     private Integer userId;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
     public Integer getId() {
