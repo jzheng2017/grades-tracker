@@ -14,6 +14,12 @@ public class Util {
         BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }
 
+    public static String getTokenFromHeaderString(String header) {
+        String TOKEN_PREFIX = "Bearer ";
+
+        return header.replace(TOKEN_PREFIX, "");
+    }
+
     //no idea how this works, but it does
     private static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
