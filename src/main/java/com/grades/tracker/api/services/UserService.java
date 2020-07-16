@@ -7,6 +7,7 @@ import com.grades.tracker.api.entities.User;
 import com.grades.tracker.api.exceptions.BadParameterException;
 import com.grades.tracker.api.exceptions.DuplicateEntryException;
 import com.grades.tracker.api.exceptions.ResourceNotFoundException;
+import com.grades.tracker.api.exceptions.UnauthorizedActionException;
 import com.grades.tracker.api.mappers.UserMapper;
 import com.grades.tracker.api.repositories.UserRepository;
 import com.grades.tracker.api.services.interfaces.HashService;
@@ -23,6 +24,7 @@ public class UserService {
     private UserRepository userRepository;
     private HashService hashService;
     private UserMapper userMapper;
+    private AuthorizationService authorizationService;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -38,6 +40,12 @@ public class UserService {
     public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
+
+    @Autowired
+    public void setAuthorizationService(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
+    }
+
 
     public List<UserDTO> getAllUsers(Predicate predicate, Pageable pageable) {
         predicate = returnPredicateWhenNull(predicate);
@@ -64,9 +72,15 @@ public class UserService {
         }
     }
 
-    public UserDTO updateUser(UserDTO user) {
+    public UserDTO updateUser(String authorizationHeader, UserDTO user) {
         if (user == null) {
             throw new BadParameterException("User is null");
+        }
+
+        boolean isAuthorized = authorizationService.authorizeByUsernameWithJwtToken(authorizationHeader, user.getId());
+
+        if (!isAuthorized) {
+            throw new UnauthorizedActionException("You are not authorized");
         }
 
         User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
