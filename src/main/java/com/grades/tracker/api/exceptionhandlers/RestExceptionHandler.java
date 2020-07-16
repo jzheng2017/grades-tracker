@@ -24,6 +24,11 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity handleInternalServerError(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionMessage(500, ex.getMessage(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity handleEntityNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionMessage(404, ex.getMessage(), LocalDateTime.now()));
